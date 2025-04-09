@@ -15,7 +15,7 @@ client.on('ready', () => {
 });
 
 client.on('voiceStateUpdate', (_, newState) => {
-  if (newState.channel.members.size === 1) {
+  if (!oldState.channel && newState.channel && newState.channel.members.size === 1) {
     const targetChannel = newState.guild.channels.cache.find(channel =>
       channel.name === 'join-logs' && channel.isTextBased()
     );
@@ -31,7 +31,7 @@ client.on('voiceStateUpdate', (_, newState) => {
 
     const mentions = onlineMembers.map(member => `<@${member.id}>`).join(' ');
     if (mentions) {
-      targetChannel.send(`Il canale vocale ${newState.channel.name} è appena stato occupato! ${mentions}`);
+      targetChannel.send(`${newState.member.user.username} si è collegato al canale: ${newState.channel.name}! ${mentions}`);
     }
   }
 });
