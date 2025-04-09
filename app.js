@@ -31,7 +31,7 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 
     const mentions = onlineMembers.map(member => `<@${member.id}>`).join(' ');
     if (mentions) {
-      targetChannel.send(`${newState.member.user.username} si è collegato al canale: ${newState.channel.name}! ${mentions}`);
+      targetChannel.send(`${newState.member.user.displayName} si è collegato al canale: ${newState.channel.name}! ${mentions}`);
     }
   }
 });
