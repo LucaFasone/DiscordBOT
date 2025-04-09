@@ -15,7 +15,7 @@ client.on('ready', () => {
 });
 
 client.on('voiceStateUpdate', (oldState, newState) => {
-  if (!oldState.channel && newState.channel && newState.channel.members.size === 1) {
+  if (newState.channel && (!oldState.channel || oldState.channel.id !== newState.channel.id) && newState.channel.members.size === 1) {
     const targetChannel = newState.guild.channels.cache.find(channel =>
       channel.name === 'join-logs' && channel.isTextBased()
     );
