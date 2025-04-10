@@ -21,7 +21,6 @@ const PORT = process.env.PORT || 3000;
 app.get('/', (req, res) => {
   res.send('Bot in esecuzione!');
 });
-
 app.listen(PORT, () => {
   console.log(`Server HTTP in ascolto sulla porta ${PORT}`);
 });
@@ -30,7 +29,7 @@ client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
 });
 client.on('voiceStateUpdate', (_, newState) => {
-  if (newState.channel.members.size === 1) {
+  if (newState.channel.members && newState.channel.members.size === 1) {
     const targetChannel = newState.guild.channels.cache.find(channel =>
       channel.name === 'join-logs' && channel.isTextBased()
     );
@@ -42,12 +41,15 @@ client.on('voiceStateUpdate', (_, newState) => {
     const onlineMembers = newState.guild.members.cache.filter(member =>
       member.presence && member.presence.status === 'online' &&
       member.user.username !== "SkibdiBOT" &&
-      member.id !== newState.member.id
+      member.id !== newState.member.id &&
+      newState.channel.permissionsFor(member).has('ViewChannel')
     );
     const mentions = onlineMembers.map(member => `<@${member.id}>`).join(' ');
 
+
+    
     if (mentions) {
-      targetChannel.send(`${newState.member.user.displayName} si è collegato al canale: ${newState.channel.name}! ${mentions}`);
+    targetChannel.send(`${newState.member.user.displayName} si è collegato al canale: ${newState.channel.name}! ${mentions}`);
     }
   }
 });
